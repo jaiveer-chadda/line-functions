@@ -7,7 +7,7 @@ line() {
   if [[ "$1" == '-n' ]] { end= ; shift; }
 
   # these are the defaults that'll be used if one of the args isn't valid
-  local -i 10 line_len=$COLUMNS
+  local -F 10 line_len=$COLUMNS
   local line_chr='─'
 
   # if there are no non-flag inputs, print the defaults and exit
@@ -30,6 +30,11 @@ line() {
   } elif [[ "$2" ]] { line_chr="$2" # if `$2` has a value, set it as the char
 
   }  # if both are empty, use the defaults
+
+  line_len=$(( line_len <= 1 ? line_len * COLUMNS : line_len ))
+
+  local -ri 10 no_dec=${line_len%.*}
+  line_len=$(( ${${line_len#*.}[1]} >= 5 ? no_dec + 1 : no_dec ))
 
   echo -nE "${(pr:line_len::$line_chr:)}$end"
 }
