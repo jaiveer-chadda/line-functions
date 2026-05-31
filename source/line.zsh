@@ -2,9 +2,27 @@
 
 line() {
 
-  # —— Setup & Options —————————————————————————————————————————————————————— #
+  # —— Setup & Constants ————————————————————————————————————————————————————— #
 
   setopt local_options warn_create_global
+
+  local -rA colours=(
+    [-B]=$'\e[1m'  [bld]=$'\e[1m'   [bold]=$'\e[1m'
+    [-d]=$'\e[2m'  [dim]=$'\e[2m'     [-D]=$'\e[2m'
+    [-r]=$'\e[31m' [red]=$'\e[31m'
+    [-y]=$'\e[33m' [yel]=$'\e[33m'  [yellow]=$'\e[33m'
+    [-g]=$'\e[32m' [grn]=$'\e[32m'   [green]=$'\e[32m'
+    [-c]=$'\e[36m' [cyn]=$'\e[36m'    [cyan]=$'\e[36m'
+    [-b]=$'\e[34m' [blu]=$'\e[34m'    [blue]=$'\e[34m'
+    [-m]=$'\e[35m' [mag]=$'\e[35m' [magenta]=$'\e[35m'
+  )
+
+  # —— Options Parsing —————————————————————————————————————————————————————— #
+
+  local colour rst
+  if [[ ${(@k)colours[(Ie)$1]}     ]] colour="$colours[$1]"     && shift
+  if [[ ${(@k)colours[(Ie)$@[-1]]} ]] colour="$colours[$@[-1]]" && shift -p
+  if [[ "$colour" ]] rst=$'\e[m'
 
   local end=$'\n'
   if [[ "$1" == '-n' ]] { end= ; shift; }
@@ -19,7 +37,7 @@ line() {
 
   # if there are no non-flag inputs, print the defaults and exit
   if ! (( $# )) {
-    echo -nE "${(pr:line_len::$line_chr:)}$end"
+    echo -nE "$colour${(pr:line_len::$line_chr:)}$rst$end"
     return
   }
 
@@ -54,5 +72,5 @@ line() {
 
   # —— Print Output ————————————————————————————————————————————————————————— #
 
-  echo -nE "${(pr:line_len::$line_chr:)}$end"
+  echo -nE "$colour${(pr:line_len::$line_chr:)}$rst$end"
 }
