@@ -1,20 +1,29 @@
 #!/usr/bin/env zsh
 
 line() {
+
+  # —— Setup & Options —————————————————————————————————————————————————————— #
+
   setopt local_options warn_create_global
 
   local end=$'\n'
   if [[ "$1" == '-n' ]] { end= ; shift; }
 
+  # —— Set Defaults ————————————————————————————————————————————————————————— #
+
   # these are the defaults that'll be used if one of the args isn't valid
   local -F 10 line_len=$COLUMNS
   local line_chr='─'
+
+  # —— Base Case ———————————————————————————————————————————————————————————— #
 
   # if there are no non-flag inputs, print the defaults and exit
   if ! (( $# )) {
     echo -nE "${(pr:line_len::$line_chr:)}$end"
     return
   }
+
+  # —— Parse Len & Char ————————————————————————————————————————————————————— #
 
   # if `$1` is a number
   if [[ "$1" == (<->(.(<->|)|)|.<->) ]] {  # (\d+(.\d*)?|.\d+)
@@ -31,10 +40,14 @@ line() {
 
   }  # if both are empty, use the defaults
 
+  # —— Normalise Len ———————————————————————————————————————————————————————— #
+
   line_len=$(( line_len <= 1 ? line_len * COLUMNS : line_len ))
 
   local -ri 10 no_dec=${line_len%.*}
   line_len=$(( ${${line_len#*.}[1]} >= 5 ? no_dec + 1 : no_dec ))
+
+  # —— Print Output ————————————————————————————————————————————————————————— #
 
   echo -nE "${(pr:line_len::$line_chr:)}$end"
 }
