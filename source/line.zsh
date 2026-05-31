@@ -33,14 +33,6 @@ line() {
   local line_len=$COLUMNS
   local line_chr='─'
 
-  # —— Base Case ———————————————————————————————————————————————————————————— #
-
-  # if there are no non-flag inputs, print the defaults and exit
-  if ! (( $# )) {
-    echo -nE "$colour${(pr:line_len::$line_chr:)}$rst$end"
-    return
-  }
-
   # —— Parse Len & Char ————————————————————————————————————————————————————— #
 
   # if `$1` is a number  # (\d+([.,]\d*)?|[.,]\d+)%?
