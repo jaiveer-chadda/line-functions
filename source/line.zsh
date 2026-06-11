@@ -20,12 +20,14 @@ line() {
   # —— Options Parsing —————————————————————————————————————————————————————— #
 
   local colour rst
-  if [[ ${(@k)colours[(Ie)$1]}     ]] colour="$colours[$1]"     && shift
-  if [[ ${(@k)colours[(Ie)$@[-1]]} ]] colour="$colours[$@[-1]]" && shift -p
+  if [[ ${(@k)colours[(Ie)$1]}     ]] { colour="$colours[$1]"    ; shift    ; }
+  if [[ ${(@k)colours[(Ie)$@[-1]]} ]] { colour="$colours[$@[-1]]"; shift -p ; }
+
   if [[ "$colour" ]] rst=$'\e[m'
 
   local end=$'\n'
-  if [[ "$1" == '-n' ]] { end= ; shift; }
+  if [[ "$1"     == '-n' ]] { end= ; shift   ; }
+  if [[ "$@[-1]" == '-n' ]] { end= ; shift -p; }
 
   # —— Set Defaults ————————————————————————————————————————————————————————— #
 
