@@ -6,6 +6,8 @@ line() {
 
   setopt local_options warn_create_global
 
+  if [[ "$1" == 'rainbow' ]] { eval line\ -{d,r,y,g,c,b,m,B}\; ; return; }
+
   local -rA colours=(
     [-B]=$'\e[1m'  [bld]=$'\e[1m'   [bold]=$'\e[1m'
     [-d]=$'\e[2m'  [dim]=$'\e[2m'     [-D]=$'\e[2m'
